@@ -1,29 +1,47 @@
 pipeline {
     agent any
-    
+
+    environment {
+        TOMCAT_HOME = '/opt/tomcat'  // Adjust the path to your Tomcat installation directory
+        WAR_FILE = 'MavenWebApp.war' // Name of the WAR file to deploy
+    }
+
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                echo "Building the Code..."
+                sh "mvn -version"
+                sh "mvn clean"
             }
         }
-        
-        stage('Build Docker Image') {
+
+        stage('Test') {
             steps {
-                script {
-                    docker.build('my-maven-app:latest', './var/lib/jenkins/workspace/Docker')
-                }
+                echo "Testing the Code..."
+                sh "mvn test"
             }
         }
-        
-        stage('Deploy Docker Container') {
+
+        stage('Compile') {
             steps {
-                script {
-                    docker.image('my-maven-app:latest').withRun('-p 8080:8080') {
-                        // Run your Docker container with port mapping
-                    }
-                }
+                echo "Compiling the Project..."
+                sh "mvn compile"
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo "Packaging the Project..."
+                sh "mvn package"
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                echo "Deploying to Tomcat..."
+                sh "cp /var/lib/jenkins/workspace/pipeline/target/MavenWebApp.war /opt/tomcat/webapps/" /*
             }
         }
     }
 }
+
