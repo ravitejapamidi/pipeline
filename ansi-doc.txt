@@ -1,0 +1,59 @@
+ansible modules
+command
+shell
+ping
+user
+file
+copy
+fetch
+apt
+yum
+service
+url
+debug
+sit
+start
+replace
+include
+pause
+docker-login
+docker-container
+docker-images
+with-items
+
+command modules
+ansible all -i /etc/ansible/hosts -m command -a 'free'  --  web - 4 
+
+shell
+ansible all -m shell -a 'ls-la > file.txt'
+
+user
+ansible all -m user -a 'name=jilani password=jilani' -b
+
+'-b' stands for become for high privaliaze on the manage naode
+
+ansible all -m user -a 'name=jilani password=jilani uid=1004 home=home/ec2-user/jilani shell=/bin/bash comment= " a user" ' -b'
+
+#file module
+state = touch 
+state = directory
+state = absent
+
+ansible all -m file -a ' name=1.txt state=touch mode 755 owner=root group=jilani' -b 
+
+install 
+
+yum module 
+
+ansible all -m yum  -a 'name = git state = present ' -b
+
+state = present -> for install 
+state = absent => for un-install
+state = latest => for upgrade -- install
+state = update_cache => is used for updating the yum repository
+
+ansible all -m yum -a 'name = http state = present update_cache = yes' -b
+
+
+
+

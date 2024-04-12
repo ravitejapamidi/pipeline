@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build('my-maven-app:latest', './var/lib/jenkins/workspace/Docker')
+                }
+            }
+        }
+        
+        stage('Deploy Docker Container') {
+            steps {
+                script {
+                    docker.image('my-maven-app:latest').withRun('-p 8080:8080') {
+                        // Run your Docker container with port mapping
+                    }
+                }
+            }
+        }
+    }
+}

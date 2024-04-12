@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  tasks:
+  - name: copy war file
+    copy: src=/var/lib/jenkins/workspace/deploy-java-war-ansible/target/MavenWebApp.war dest=/opt/tomcat/webapps/
